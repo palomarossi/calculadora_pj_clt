@@ -19,27 +19,45 @@
   padding: 20px;
 }
 
-/* Card Principal */
+/* Card Principal - Aumentado */
 .main-card {
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 1200px; 
+  
+  /* Centraliza na tela */
+  margin: 0 auto; 
+  padding: 0 20px;
+  
   background-color: transparent;
-  border-radius: 0;
-  overflow: visible; 
-  box-shadow: none; 
   align-items: center; 
   gap: 40px; 
+  
+  /* A MÁGICA: Transição suave de largura e flex */
+  transition: max-width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* ESTADO 1: COMPACTO (Formulário) */
+.main-card.compact {
+  max-width: 1100px; /* Largura menor, focada no formulário */
+}
+
+/* ESTADO 2: EXPANDIDO (Resultados) */
+.main-card.expanded {
+  max-width: 1600px; /* Largura total para caber os gráficos */
 }
 
 /* =========================================
    2. PAINÉIS (ESQUERDA E DIREITA)
    ========================================= */
 
+.left-panel, .right-panel {
+  /* Transição suave também para os painéis internos */
+  transition: flex 0.6s ease-in-out, min-width 0.6s ease-in-out;
+}
+
 /* Painel Esquerdo */
 .left-panel {
-  flex: 0.8; 
   background: transparent; 
   color: white;
   padding: 1rem; 
@@ -47,6 +65,12 @@
   flex-direction: column;
   justify-content: center;
 }
+
+.main-card.compact .left-panel { flex: 0.8; }
+.main-card.compact .right-panel { flex: 1.2; }
+
+.main-card.expanded .left-panel { flex: 0.6; }
+.main-card.expanded .right-panel { flex: 2.0; }
 
 .left-panel h1 {
   font-size: 3rem;
@@ -67,15 +91,15 @@
 /* Painel Direito */
 .right-panel {
   position: relative; 
-  flex: 1.2;
   background-color: white;
-  padding: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   border-radius: 20px; 
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); 
-  border-left: none;
+  
+  /* Paddings ajustados */
+  padding: 2rem 3rem; 
 }
 
 .right-panel h2 {
@@ -245,7 +269,7 @@
   gap: 12px;
   margin-bottom: 20px;
   padding-left: 15px;
-  border-left: 2px solid #e5e7eb;
+
 }
 
 .sub-input-group {
@@ -256,7 +280,7 @@
 }
 
 .sub-input-group label {
-  color: #6b7280;
+  color: #000000;
   font-weight: 500;
   margin-right: 10px;
   white-space: nowrap;
@@ -265,12 +289,11 @@
 .input-sub {
   width: 120px;
   padding: 6px 10px;
-  border: 1px solid #e5e7eb;
+  border: 0px solid #e5e7eb;
   border-radius: 6px;
   text-align: right;
   font-size: 0.9rem;
-  color: #374151;
-  background-color: #f9fafb;
+
   outline: none;
   transition: all 0.2s;
 }
@@ -373,11 +396,12 @@
 /* =========================================
    8. RESPONSIVIDADE (MOBILE)
    ========================================= */
-@media (max-width: 900px) {
+@media (max-width: 1100px) { /* Aumentei o breakpoint pois o card ficou mais largo */
   .main-card {
     flex-direction: column;
-    max-width: 500px;
-    gap: 2rem;
+    max-width: 700px; /* Largura controlada no modo coluna */
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .left-panel {
@@ -391,9 +415,10 @@
   }
 
   .right-panel {
-    padding: 2rem;
-    width: 100%; 
-  }
+      width: 100%;
+      min-width: auto; /* Remove a trava de largura no mobile */
+    }
+
 
   .form-body-row {
     flex-direction: column;
@@ -459,4 +484,216 @@
   visibility: visible;
   opacity: 1;
   transform: translateX(-50%) translateY(-5px); 
+}
+
+/* =========================================
+   10. TELA DE RESULTADOS (DESIGN FIEL & AUMENTADO)
+   ========================================= */
+
+.result-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.result-title {
+  color: #1e3a8a;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* --- Barras de Comparação --- */
+.comparison-bars {
+  width: 100%;
+  max-width: 550px;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.bar-pill {
+  height: 45px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  min-width: 80px;
+  transition: width 1s ease-out;
+}
+
+.pill-pj {
+  background-color: #64FFDA;
+  color: rgba(0,0,0,0.2);
+}
+
+.pill-clt {
+  background-color: #FFC107;
+  color: rgba(0,0,0,0.2);
+}
+
+.bar-label-text {
+  margin-left: 15px;
+  color: #1e3a8a;
+  font-weight: 800;
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+
+.result-summary {
+  text-align: center;
+  color: #546e7a;
+  font-size: 1.05rem;
+  margin-bottom: 0.9rem;
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+/* --- Gráficos Lado a Lado --- */
+.charts-row {
+  display: flex;
+  justify-content: space-around; /* Melhor distribuição */
+  width: 90%;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+
+.chart-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 300px; /* Garante que não esmague demais */
+}
+
+.chart-header {
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: #1e3a8a;
+  text-transform: uppercase;
+  margin-bottom: 0rem;
+  text-align: center;
+}
+
+/* CONTAINER AUMENTADO PARA ACOMODAR GRÁFICO MAIOR */
+.recharts-wrapper-custom {
+  width: 100%;
+  max-width: 450px; 
+  height: 350px; /* Aumentado de 280px para 350px */
+  position: relative;
+  margin-bottom: 1px;
+}
+
+.chart-footer-text {
+  font-size: 0.85rem;
+  color: #374151;
+  text-align: justify;
+  text-align-last: center;
+  
+  /* Reduzi de 1.4 para 1.2 para juntar as linhas */
+  line-height: 1.0; 
+  
+  max-width: 320px;
+  margin-top: 0px; /* Garante que não cole demais no gráfico */
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid #3b82f6;
+  color: #3b82f6;
+  padding: 10px 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+.btn-back:hover {
+  background-color: #eff6ff;
+}
+
+/* --- MEDIA QUERIES (MOBILE ADAPTATION) --- */
+@media (max-width: 950px) {
+  /* Força o card principal a virar coluna */
+  .main-card {
+    flex-direction: column;
+    max-width: 600px;
+    gap: 2rem;
+    margin-bottom: 60px; /* Espaço para o footer fixo não cobrir */
+  }
+  
+  .left-panel {
+    text-align: center;
+    padding: 1rem;
+    align-items: center;
+  }
+  .left-panel h1 { font-size: 2.5rem; }
+
+  .right-panel {
+    padding: 2rem 1.5rem; /* Menos padding lateral */
+    width: 100%; 
+    border-radius: 15px;
+  }
+  
+  /* Ajustes do Formulário no Mobile */
+  .form-body-row {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .col-radios { margin-top: 1rem; }
+  
+  /* Ajustes dos Resultados no Mobile */
+  .charts-row {
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+  }
+  
+  .recharts-wrapper-custom {
+    /* No mobile, garante que o gráfico não estoure a tela */
+    max-width: 100%; 
+    height: 320px; /* Um pouco menor no mobile para caber melhor */
+  }
+
+  .bar-row {
+    flex-direction: column;
+    align-items: center; /* Centraliza as barras e textos */
+  }
+  .bar-pill { width: 100% !important; max-width: 300px; }
+  .bar-label-text {
+    margin-left: 10px; /* Reduzi de 15px para 10px */
+    color: #1e3a8a;
+    font-weight: 800;
+    font-size: 1.2rem;
+    white-space: nowrap;
+  }
+  
+  .result-title { font-size: 1.5rem; }
+  .result-summary br { display: none; } /* Remove quebra de linha no mobile */
+
+  /* Ajuste do Footer no Mobile */
+  .footer-cta {
+    padding: 10px;
+  }
+  .footer-content {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+  }
 }
