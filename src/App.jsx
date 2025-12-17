@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   // --- useStates (Dados do Formulário) ---
   const [valorBruto, setValorBruto] = useState('');
-  const [temBeneficios, setTemBeneficios] = useState('nao'); 
+  const [temBeneficios, setTemBeneficios] = useState(''); 
   const [regime, setRegime] = useState('mei');
   
   const [valeTransporte, setValeTransporte] = useState('R$ 0,00');
@@ -162,6 +162,19 @@ function App() {
 
   const handleRefazer = () => setShowResult(false);
 
+  const handleReiniciar = () => {
+    setValorBruto('');
+    setTemBeneficios('');
+    setRegime('mei');
+    setValeTransporte('R$ 0,00');
+    setValeRefeicao('R$ 0,00');
+    setPlanoSaude('R$ 0,00');
+    setOutrosBeneficios('R$ 0,00');
+    setErrorMessage('');
+    setResultData(null);
+    setShowResult(false);
+  };
+
   // --- CORES ---
   const COLORS_CLT = ['#FFC107', '#03A9F4', '#263238', '#2962FF', '#69F0AE'];
   const COLORS_PJ = ['#FFC107', '#2196F3', '#00E5FF', '#3F51B5', '#263238', '#5E35B1', '#E91E63']; 
@@ -252,10 +265,10 @@ function App() {
                       </label>
                       <div className="checkbox-wrapper">
                         <label className={`checkbox-item ${temBeneficios === 'sim' ? 'active-check' : ''}`}>
-                          <input type="checkbox" checked={temBeneficios === 'sim'} onChange={() => setTemBeneficios('sim')} /> Sim
+                          <input type="checkbox" checked={temBeneficios === 'sim'} onChange={() => setTemBeneficios(temBeneficios === 'sim' ? '' : 'sim')} /> Sim
                         </label>
                         <label className={`checkbox-item ${temBeneficios === 'nao' ? 'active-check' : ''}`}>
-                          <input type="checkbox" checked={temBeneficios === 'nao'} onChange={() => setTemBeneficios('nao')} /> Não
+                          <input type="checkbox" checked={temBeneficios === 'nao'} onChange={() => setTemBeneficios(temBeneficios === 'nao' ? '' : 'nao')} /> Não
                         </label>
                       </div>
                     </div>
@@ -269,7 +282,10 @@ function App() {
                       </div>
                     )}
 
-                    <button className="btn-action desktop-only" onClick={handleComparar}>COMPARAR</button>
+                    <div className="actions-row desktop-only">
+                      <button className="btn-action" onClick={handleComparar}>COMPARAR</button>
+                      <button type="button" className="btn-icon" onClick={handleReiniciar} aria-label="Reiniciar" title="Reiniciar">↻</button>
+                    </div>
                   </div>
 
                   <div className="col-radios">
@@ -292,7 +308,10 @@ function App() {
                         </label>
                       </div>
 
-                      <button className="btn-action mobile-only" onClick={handleComparar}>COMPARAR</button>
+                      <div className="actions-row mobile-only">
+                        <button className="btn-action" onClick={handleComparar}>COMPARAR</button>
+                        <button type="button" className="btn-icon" onClick={handleReiniciar} aria-label="Reiniciar" title="Reiniciar">↻</button>
+                      </div>
                     </div>
                   </div>
                 </div>
