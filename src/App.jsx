@@ -223,7 +223,9 @@ function App() {
                         <span className="info-icon">
                           ⓘ
                           <span className="tooltip-box">
-                            Para CLT: “salário”. <br/>Para PJ: “faturamento”.
+                            Para CLT, será considerado
+                            como “salário”. Para PJ, será
+                            considerado como “faturamento”.
                           </span>
                         </span>
                       </label>
@@ -267,7 +269,7 @@ function App() {
                       </div>
                     )}
 
-                    <button className="btn-action" onClick={handleComparar}>COMPARAR</button>
+                    <button className="btn-action desktop-only" onClick={handleComparar}>COMPARAR</button>
                   </div>
 
                   <div className="col-radios">
@@ -289,6 +291,8 @@ function App() {
                           <div className="radio-text"><strong>Lucro Presumido</strong><span>— IRPJ/CSLL/PIS/COFINS: 11,33%</span><span>— Lucro Imobiliário</span></div>
                         </label>
                       </div>
+
+                      <button className="btn-action mobile-only" onClick={handleComparar}>COMPARAR</button>
                     </div>
                   </div>
                 </div>

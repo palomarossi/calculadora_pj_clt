@@ -393,6 +393,15 @@
   background-color: #2563eb;
 }
 
+/* Visibilidade condicional (desktop/mobile) */
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+
 /* =========================================
    8. RESPONSIVIDADE (MOBILE)
    ========================================= */
@@ -424,6 +433,15 @@
     flex-direction: column;
     gap: 1.5rem;
   }
+
+  /* No mobile, o botão COMPARAR deve ficar abaixo do Regime PJ */
+  .mobile-only {
+    display: block;
+  }
+
+  .desktop-only {
+    display: none;
+  }
 }
 
 /* =========================================
@@ -444,8 +462,8 @@
 .tooltip-box {
   visibility: hidden;
   width: 240px; 
-  background-color: #1f2937; 
-  color: #fff;
+  background-color: #59f8e8; 
+  color: #000;
   text-align: center;
   border-radius: 8px;
   padding: 10px 12px;
@@ -476,7 +494,7 @@
   margin-left: -6px; 
   border-width: 6px;
   border-style: solid;
-  border-color: #1f2937 transparent transparent transparent; 
+  border-color: #59f8e8 transparent transparent transparent; 
 }
 
 /* Mostrar ao passar o mouse */
