@@ -17,6 +17,8 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [errorKey, setErrorKey] = useState(0);
   const [errorFields, setErrorFields] = useState({ valorBruto: false, beneficios: false });
+  const [invalidAttempts, setInvalidAttempts] = useState(0);
+  const [compareLocked, setCompareLocked] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [resultData, setResultData] = useState(null);
 
@@ -24,6 +26,10 @@ function App() {
   const parseCurrency = (strValue) => {
     if (!strValue) return 0;
     return parseFloat(strValue.replace(/\D/g, "")) / 100;
+  };
+
+  const isFormValid = (valorBrutoValue, beneficiosValue) => {
+    return valorBrutoValue > 0 && (beneficiosValue === 'sim' || beneficiosValue === 'nao');
   };
   
   const formatCurrency = (value) => {
@@ -34,9 +40,15 @@ function App() {
   };
 
   const handleCurrencyInput = (setter) => (e) => {
-    setter(formatCurrency(e.target.value));
+    const nextValue = formatCurrency(e.target.value);
+    setter(nextValue);
     if (errorMessage) setErrorMessage('');
     setErrorFields((prev) => ({ ...prev, valorBruto: false }));
+
+    if (compareLocked && isFormValid(parseCurrency(nextValue), temBeneficios)) {
+      setCompareLocked(false);
+      setInvalidAttempts(0);
+    }
   };
 
   const showError = (message, fields = []) => {
@@ -49,9 +61,15 @@ function App() {
   };
 
   const handleBeneficiosToggle = (value) => {
-    setTemBeneficios((prev) => (prev === value ? '' : value));
+    const nextValue = temBeneficios === value ? '' : value;
+    setTemBeneficios(nextValue);
     if (errorMessage) setErrorMessage('');
     setErrorFields((prev) => ({ ...prev, beneficios: false }));
+
+    if (compareLocked && isFormValid(parseCurrency(valorBruto), nextValue)) {
+      setCompareLocked(false);
+      setInvalidAttempts(0);
+    }
   };
 
   // --- CÁLCULOS TRIBUTÁRIOS (Lógica de 2025) ---
@@ -77,6 +95,8 @@ function App() {
   };
 
   const handleComparar = () => {
+    if (compareLocked) return;
+
     const vBruto = parseCurrency(valorBruto);
 
     const isValorInvalido = !vBruto || vBruto === 0;
@@ -87,6 +107,12 @@ function App() {
       if (isValorInvalido) fields.push('valorBruto');
       if (isBeneficiosInvalido) fields.push('beneficios');
       showError("EXISTEM VALORES INSERIDOS INCORRETAMENTE.", fields);
+
+      setInvalidAttempts((prev) => {
+        const next = prev + 1;
+        if (next >= 2) setCompareLocked(true);
+        return next;
+      });
       return;
     }
 
@@ -215,6 +241,9 @@ function App() {
     setPlanoSaude('R$ 0,00');
     setOutrosBeneficios('R$ 0,00');
     setErrorMessage('');
+    setErrorFields({ valorBruto: false, beneficios: false });
+    setInvalidAttempts(0);
+    setCompareLocked(false);
     setResultData(null);
     setShowResult(false);
   };
@@ -332,7 +361,7 @@ function App() {
                     )}
 
                     <div className="actions-row desktop-only">
-                      <button className="btn-action" onClick={handleComparar}>COMPARAR</button>
+                      <button className="btn-action" onClick={handleComparar} disabled={compareLocked}>COMPARAR</button>
                       <button type="button" className="btn-icon" onClick={handleReiniciar} aria-label="Reiniciar" title="Reiniciar">↻</button>
                     </div>
                   </div>
@@ -358,7 +387,7 @@ function App() {
                       </div>
 
                       <div className="actions-row mobile-only">
-                        <button className="btn-action" onClick={handleComparar}>COMPARAR</button>
+                        <button className="btn-action" onClick={handleComparar} disabled={compareLocked}>COMPARAR</button>
                         <button type="button" className="btn-icon" onClick={handleReiniciar} aria-label="Reiniciar" title="Reiniciar">↻</button>
                       </div>
                     </div>
