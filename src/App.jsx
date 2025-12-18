@@ -291,6 +291,8 @@ function App() {
                       </label>
                       <input 
                         type="text" 
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         value={valorBruto}
                         onChange={handleCurrencyInput(setValorBruto)}
                         className={`input-pill ${errorFields.valorBruto ? 'input-error' : ''}`}
@@ -322,10 +324,10 @@ function App() {
 
                     {temBeneficios === 'sim' && (
                       <div className="benefits-container fade-in">
-                        <div className="sub-input-group"><label>Vale-transporte:</label><input type="text" value={valeTransporte} onChange={handleCurrencyInput(setValeTransporte)} className="input-sub"/></div>
-                        <div className="sub-input-group"><label>VR/VA:</label><input type="text" value={valeRefeicao} onChange={handleCurrencyInput(setValeRefeicao)} className="input-sub"/></div>
-                        <div className="sub-input-group"><label>Plano de Saúde:</label><input type="text" value={planoSaude} onChange={handleCurrencyInput(setPlanoSaude)} className="input-sub"/></div>
-                        <div className="sub-input-group"><label>Outros:</label><input type="text" value={outrosBeneficios} onChange={handleCurrencyInput(setOutrosBeneficios)} className="input-sub"/></div>
+                        <div className="sub-input-group"><label>Vale-transporte:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={valeTransporte} onChange={handleCurrencyInput(setValeTransporte)} className="input-sub"/></div>
+                        <div className="sub-input-group"><label>VR/VA:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={valeRefeicao} onChange={handleCurrencyInput(setValeRefeicao)} className="input-sub"/></div>
+                        <div className="sub-input-group"><label>Plano de Saúde:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={planoSaude} onChange={handleCurrencyInput(setPlanoSaude)} className="input-sub"/></div>
+                        <div className="sub-input-group"><label>Outros:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={outrosBeneficios} onChange={handleCurrencyInput(setOutrosBeneficios)} className="input-sub"/></div>
                       </div>
                     )}
 
