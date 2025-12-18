@@ -15,6 +15,8 @@ function App() {
 
   // --- Estados de Resultado ---
   const [errorMessage, setErrorMessage] = useState('');
+  const [errorKey, setErrorKey] = useState(0);
+  const [errorFields, setErrorFields] = useState({ valorBruto: false, beneficios: false });
   const [showResult, setShowResult] = useState(false);
   const [resultData, setResultData] = useState(null);
 
@@ -34,16 +36,33 @@ function App() {
   const handleCurrencyInput = (setter) => (e) => {
     setter(formatCurrency(e.target.value));
     if (errorMessage) setErrorMessage('');
+    setErrorFields((prev) => ({ ...prev, valorBruto: false }));
+  };
+
+  const showError = (message, fields = []) => {
+    setErrorMessage(message);
+    setErrorFields({
+      valorBruto: fields.includes('valorBruto'),
+      beneficios: fields.includes('beneficios'),
+    });
+    setErrorKey((k) => k + 1);
+  };
+
+  const handleBeneficiosToggle = (value) => {
+    setTemBeneficios((prev) => (prev === value ? '' : value));
+    if (errorMessage) setErrorMessage('');
+    setErrorFields((prev) => ({ ...prev, beneficios: false }));
   };
 
   // --- CÁLCULOS TRIBUTÁRIOS (Lógica de 2025) ---
   const calcularINSS = (salario) => {
     let inss = 0;
-    if (salario <= 1412.00) inss = salario * 0.075;
-    else if (salario <= 2666.68) inss = (1412.00 * 0.075) + ((salario - 1412.00) * 0.09);
-    else if (salario <= 4000.03) inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((salario - 2666.68) * 0.12);
-    else if (salario <= 7786.02) inss = (1412.00 * 0.075) + ((2666.68 - 1412.00) * 0.09) + ((4000.03 - 2666.68) * 0.12) + ((salario - 4000.03) * 0.14);
-    else inss = 908.85; 
+    // Faixas INSS 2025 (progressivo)
+    if (salario <= 1518.0) inss = salario * 0.075;
+    else if (salario <= 2793.88) inss = (1518.0 * 0.075) + ((salario - 1518.0) * 0.09);
+    else if (salario <= 4190.83) inss = (1518.0 * 0.075) + ((2793.88 - 1518.0) * 0.09) + ((salario - 2793.88) * 0.12);
+    else if (salario <= 8157.41) inss = (1518.0 * 0.075) + ((2793.88 - 1518.0) * 0.09) + ((4190.83 - 2793.88) * 0.12) + ((salario - 4190.83) * 0.14);
+    else inss = 951.63;
     return inss;
   };
 
@@ -59,9 +78,15 @@ function App() {
 
   const handleComparar = () => {
     const vBruto = parseCurrency(valorBruto);
-    
-    if (!vBruto || vBruto === 0) {
-      setErrorMessage("EXISTEM VALORES INSERIDOS INCORRETAMENTE.");
+
+    const isValorInvalido = !vBruto || vBruto === 0;
+    const isBeneficiosInvalido = temBeneficios !== 'sim' && temBeneficios !== 'nao';
+
+    if (isValorInvalido || isBeneficiosInvalido) {
+      const fields = [];
+      if (isValorInvalido) fields.push('valorBruto');
+      if (isBeneficiosInvalido) fields.push('beneficios');
+      showError("EXISTEM VALORES INSERIDOS INCORRETAMENTE.", fields);
       return;
     }
 
@@ -100,28 +125,40 @@ function App() {
     ].filter(i => i.value > 0);
 
     // --- 3. CÁLCULO PJ ---
-    const custoRealPJ = vBruto + totalBeneficios;
+    const regimeUsado = regime;
 
     let impostosPJ = 0;
-    if (regime === 'mei') impostosPJ = 75.00;
-    else if (regime === 'simples') impostosPJ = vBruto * 0.06;
-    else if (regime === 'presumido') impostosPJ = vBruto * 0.1633;
+    if (regimeUsado === 'mei') impostosPJ = 75.0;
+    else if (regimeUsado === 'simples') impostosPJ = vBruto * 0.06;
+    else if (regimeUsado === 'presumido') impostosPJ = vBruto * 0.1133;
 
-    const contabilidade = regime === 'mei' ? 0 : 350.00;
-    const custosAdicionais = vBruto * 0.02; 
-    const proLabore = 1412.00;
-    const inssProLabore = proLabore * 0.11;
-    const faturamentoLiquido = vBruto - impostosPJ - contabilidade - custosAdicionais - inssProLabore;
+    // Custos adicionais (aplicáveis para Simples/Presumido)
+    const contabilidade = regimeUsado === 'mei' ? 0 : 350.0;
+    const custosAdicionais = regimeUsado === 'mei' ? 0 : vBruto * 0.02;
+    const proLabore = regimeUsado === 'mei' ? 0 : 1412.0;
+    const inssProLabore = regimeUsado === 'mei' ? 0 : proLabore * 0.11;
 
-    const baseGraficoPJ = custoRealPJ; 
+    // Modelo de custo utilizado na comparação e no gráfico:
+    // - MEI: faturamento + benefícios + DAS (R$ 75)
+    // - Simples/Presumido: faturamento + benefícios + impostos + pró-labore + INSS + contabilidade + custos adicionais
+    const custoRealPJ =
+      vBruto +
+      totalBeneficios +
+      impostosPJ +
+      contabilidade +
+      custosAdicionais +
+      proLabore +
+      inssProLabore;
 
-    const pPJ_Faturamento = parseFloat(((faturamentoLiquido / baseGraficoPJ) * 100).toFixed(1));
-    const pPJ_INSS = parseFloat(((inssProLabore / baseGraficoPJ) * 100).toFixed(1));
+    const baseGraficoPJ = custoRealPJ;
+
+    const pPJ_Faturamento = parseFloat(((vBruto / baseGraficoPJ) * 100).toFixed(1));
     const pPJ_Impostos = parseFloat(((impostosPJ / baseGraficoPJ) * 100).toFixed(1));
+    const pPJ_Beneficios = parseFloat(((totalBeneficios / baseGraficoPJ) * 100).toFixed(1));
+    const pPJ_INSS = parseFloat(((inssProLabore / baseGraficoPJ) * 100).toFixed(1));
     const pPJ_ProLabore = parseFloat(((proLabore / baseGraficoPJ) * 100).toFixed(1));
     const pPJ_Contabil = parseFloat(((contabilidade / baseGraficoPJ) * 100).toFixed(1));
     const pPJ_Custos = parseFloat(((custosAdicionais / baseGraficoPJ) * 100).toFixed(1));
-    const pPJ_Beneficios = parseFloat(((totalBeneficios / baseGraficoPJ) * 100).toFixed(1));
 
     const dataPJ = [
       { name: 'Faturamento', value: pPJ_Faturamento },
@@ -130,8 +167,8 @@ function App() {
       { name: 'Pró-labore', value: pPJ_ProLabore },
       { name: 'Contabilidade', value: pPJ_Contabil },
       { name: 'Custos Adic.', value: pPJ_Custos },
-      { name: 'Benefícios', value: pPJ_Beneficios }, 
-    ].filter(i => i.value > 0);
+      { name: 'Benefícios', value: pPJ_Beneficios },
+    ].filter((i) => i.value > 0);
 
     // --- 4. RESULTADO ---
     const diferenca = custoRealCLT - custoRealPJ;
@@ -152,7 +189,14 @@ function App() {
       clt: { total: custoRealCLT, chart: dataCLT, percentBar: (custoRealCLT / maxVal) * 100, 
              pSalario: pCLT_Salario, pBeneficios: pCLT_Beneficios, pINSS: pCLT_INSS_Text, pIRRF: pCLT_IRRF_Text, pFGTS: pCLT_FGTS_Text },
       pj: { total: custoRealPJ, chart: dataPJ, percentBar: (custoRealPJ / maxVal) * 100,
-            pFaturamento: pPJ_Faturamento, pINSS: pPJ_INSS, pImpostos: pPJ_Impostos, pProLabore: pPJ_ProLabore, pContabilidade: pPJ_Contabil, pCustos: pPJ_Custos },
+            regime: regimeUsado,
+            pFaturamento: pPJ_Faturamento,
+            pINSS: pPJ_INSS,
+            pImpostos: pPJ_Impostos,
+            pProLabore: pPJ_ProLabore,
+            pContabilidade: pPJ_Contabil,
+            pCustos: pPJ_Custos,
+            pBeneficios: pPJ_Beneficios },
       mensagemDinamica: fraseResultado
     });
 
@@ -216,8 +260,11 @@ function App() {
             // --- TELA 1: FORMULÁRIO ---
             <>
               {errorMessage && (
-                <div className="error-alert fade-in-down">
-                  <button className="close-btn" onClick={() => setErrorMessage('')}>X</button>
+                <div key={errorKey} className="error-alert fade-in-down">
+                  <button className="close-btn" onClick={() => {
+                    setErrorMessage('');
+                    setErrorFields({ valorBruto: false, beneficios: false });
+                  }}>X</button>
                   <strong>{errorMessage}</strong>
                   <span>Verifique os valores preenchidos para você obter um resultado eficiente!</span>
                 </div>
@@ -246,7 +293,7 @@ function App() {
                         type="text" 
                         value={valorBruto}
                         onChange={handleCurrencyInput(setValorBruto)}
-                        className={`input-pill ${errorMessage ? 'input-error' : ''}`}
+                        className={`input-pill ${errorFields.valorBruto ? 'input-error' : ''}`}
                         placeholder="R$ 0,00"
                       />
                     </div>
@@ -263,12 +310,12 @@ function App() {
                           </span>
                         </span>
                       </label>
-                      <div className="checkbox-wrapper">
+                      <div className={`checkbox-wrapper ${errorFields.beneficios ? 'benefits-error' : ''}`}>
                         <label className={`checkbox-item ${temBeneficios === 'sim' ? 'active-check' : ''}`}>
-                          <input type="checkbox" checked={temBeneficios === 'sim'} onChange={() => setTemBeneficios(temBeneficios === 'sim' ? '' : 'sim')} /> Sim
+                          <input type="checkbox" checked={temBeneficios === 'sim'} onChange={() => handleBeneficiosToggle('sim')} /> Sim
                         </label>
                         <label className={`checkbox-item ${temBeneficios === 'nao' ? 'active-check' : ''}`}>
-                          <input type="checkbox" checked={temBeneficios === 'nao'} onChange={() => setTemBeneficios(temBeneficios === 'nao' ? '' : 'nao')} /> Não
+                          <input type="checkbox" checked={temBeneficios === 'nao'} onChange={() => handleBeneficiosToggle('nao')} /> Não
                         </label>
                       </div>
                     </div>
@@ -378,9 +425,20 @@ function App() {
                     </ResponsiveContainer>
                   </div>
                   <p className="chart-footer-text">
-                    Já na <strong>contratação via PJ</strong>, seus gastos se dariam em: {resultData.pj.pFaturamento}% de faturamento; 
-                    {` `}{resultData.pj.pINSS}% de INSS; {resultData.pj.pImpostos}% de impostos; {resultData.pj.pProLabore}% de pró-labore; 
-                    {` `}{resultData.pj.pContabilidade}% de contabilidade; e {resultData.pj.pCustos}% de custos adicionais.
+                    {resultData.pj.regime === 'mei' ? (
+                      <>
+                        Já na <strong>contratação via PJ (MEI)</strong>, seus gastos se dariam em: {resultData.pj.pFaturamento}% de faturamento;
+                        {resultData.pj.pBeneficios > 0 ? ` ${resultData.pj.pBeneficios}% de benefícios;` : ''}
+                        {` `}e {resultData.pj.pImpostos}% de impostos.
+                      </>
+                    ) : (
+                      <>
+                        Já na <strong>contratação via PJ</strong>, seus gastos se dariam em: {resultData.pj.pFaturamento}% de faturamento;
+                        {` `}{resultData.pj.pINSS}% de INSS; {resultData.pj.pImpostos}% de impostos; {resultData.pj.pProLabore}% de pró-labore;
+                        {` `}{resultData.pj.pContabilidade}% de contabilidade; e {resultData.pj.pCustos}% de custos adicionais.
+                        {resultData.pj.pBeneficios > 0 ? ` ${resultData.pj.pBeneficios}% de benefícios.` : ''}
+                      </>
+                    )}
                   </p>
                 </div>
               </div>

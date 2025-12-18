@@ -177,6 +177,14 @@
   margin-bottom: 15px;
 }
 
+/* Estado de erro para o bloco de Benefícios (similar ao input-error) */
+.benefits-error {
+  border: 1px solid #ef4444;
+  background-color: #fef2f2;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
 .checkbox-item {
   display: flex;
   align-items: center; 
