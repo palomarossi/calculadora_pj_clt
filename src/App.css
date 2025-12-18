@@ -552,6 +552,19 @@
   transform: translateX(-50%) translateY(-5px); 
 }
 
+/* Modo noturno: mantém o texto da tooltip preto */
+@media (prefers-color-scheme: dark) {
+  .tooltip-box {
+    color: #000;
+  }
+}
+
+.dark .tooltip-box,
+.night .tooltip-box,
+[data-theme="dark"] .tooltip-box {
+  color: #000;
+}
+
 /* =========================================
    10. TELA DE RESULTADOS (DESIGN FIEL & AUMENTADO)
    ========================================= */
