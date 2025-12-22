@@ -177,12 +177,10 @@
   margin-bottom: 15px;
 }
 
-/* Estado de erro para o bloco de Benefícios (similar ao input-error) */
-.benefits-error {
-  border: 1px solid #ef4444;
-  background-color: #fef2f2;
-  padding: 10px 12px;
-  border-radius: 12px;
+/* Estado de erro para seleção de benefícios */
+.checkbox-wrapper.benefits-error .checkbox-item {
+  color: #ef4444;
+  font-weight: 700;
 }
 
 .checkbox-item {
@@ -278,6 +276,17 @@
   margin-bottom: 20px;
   padding-left: 15px;
 
+}
+
+/* Estado de erro quando benefícios = SIM e todos os valores = R$ 0,00 */
+.benefits-values-error label {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.benefits-values-error .input-sub {
+  border: 1px solid #ef4444;
+  background-color: #fef2f2;
 }
 
 .sub-input-group {
@@ -395,11 +404,6 @@
   margin-top: 1rem;
   text-transform: uppercase;
   transition: background-color 0.2s;
-}
-
-.btn-action:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
 }
 
 .btn-action:hover {
@@ -557,19 +561,6 @@
   transform: translateX(-50%) translateY(-5px); 
 }
 
-/* Modo noturno: mantém o texto da tooltip preto */
-@media (prefers-color-scheme: dark) {
-  .tooltip-box {
-    color: #000;
-  }
-}
-
-.dark .tooltip-box,
-.night .tooltip-box,
-[data-theme="dark"] .tooltip-box {
-  color: #000;
-}
-
 /* =========================================
    10. TELA DE RESULTADOS (DESIGN FIEL & AUMENTADO)
    ========================================= */
@@ -694,6 +685,45 @@
   margin-top: 0px; /* Garante que não cole demais no gráfico */
 }
 
+/* --- Legenda do Gráfico --- */
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  max-width: 300px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.legend-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.legend-text {
+  flex: 1;
+  color: #374151;
+  font-weight: 500;
+}
+
+.legend-value {
+  color: #111827;
+  font-weight: 700;
+  margin-left: auto;
+}
+
 .btn-back {
   background: transparent;
   border: 1px solid #3b82f6;
@@ -751,7 +781,7 @@
   .recharts-wrapper-custom {
     /* No mobile, garante que o gráfico não estoure a tela */
     max-width: 100%; 
-    height: 320px; /* Um pouco menor no mobile para caber melhor */
+    height: 350px; /* Um pouco menor no mobile para caber melhor */
   }
 
   .bar-row {
