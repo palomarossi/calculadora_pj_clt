@@ -598,6 +598,11 @@
   width: 100%;
 }
 
+.bar-track {
+  flex: 1;
+  display: flex;
+}
+
 .bar-pill {
   height: 45px;
   border-radius: 8px;
@@ -626,6 +631,8 @@
   font-weight: 800;
   font-size: 1.2rem;
   white-space: nowrap;
+  width: 160px; /* Largura fixa para alinhar as barras corretamente */
+  text-align: left;
 }
 
 .result-summary {
@@ -788,9 +795,19 @@
     flex-direction: column;
     align-items: center; /* Centraliza as barras e textos */
   }
+  
+  .bar-track {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
   .bar-pill { width: 100% !important; max-width: 300px; }
   .bar-label-text {
-    margin-left: 10px; /* Reduzi de 15px para 10px */
+    margin-left: 0; 
+    margin-top: 5px;
+    width: auto;
+    text-align: center;
     color: #1e3a8a;
     font-weight: 800;
     font-size: 1.2rem;

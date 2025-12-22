@@ -524,14 +524,18 @@ function App() {
               
               <div className="comparison-bars">
                 <div className="bar-row">
-                   <div className="bar-pill pill-pj" style={{width: `${resultData.pj.percentBar}%`}}>
-                      <span>{resultData.pj.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                   <div className="bar-track">
+                     <div className="bar-pill pill-pj" style={{width: `${resultData.pj.percentBar}%`}}>
+                        <span>{resultData.pj.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                     </div>
                    </div>
                    <span className="bar-label-text">Pessoa Jurídica</span>
                 </div>
                 <div className="bar-row">
-                   <div className="bar-pill pill-clt" style={{width: `${resultData.clt.percentBar}%`}}>
-                      <span>{resultData.clt.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                   <div className="bar-track">
+                     <div className="bar-pill pill-clt" style={{width: `${resultData.clt.percentBar}%`}}>
+                        <span>{resultData.clt.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                     </div>
                    </div>
                    <span className="bar-label-text">CLT</span>
                 </div>
