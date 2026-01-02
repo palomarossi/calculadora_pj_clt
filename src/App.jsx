@@ -201,7 +201,7 @@ function App() {
     const pCLT_BenefExtras = parseFloat(((totalBeneficios / vBruto) * 100).toFixed(1));
 
     const dataCLT = [
-      { name: 'Salário Líquido', value: pCLT_Liquido },
+      { name: 'Salário', value: pCLT_Liquido },
       { name: 'Benefícios Obrigatórios', value: pCLT_BenefObrig },
       { name: 'Benefícios Extras', value: pCLT_BenefExtras },
       { name: 'Descontos', value: pCLT_Descontos },
@@ -237,7 +237,7 @@ function App() {
     const pPJ_BenefExtras = parseFloat(((totalBeneficios / vBruto) * 100).toFixed(1));
 
     const dataPJ = [
-      { name: 'Líquido', value: pPJ_Liquido },
+      { name: 'Salário', value: pPJ_Liquido },
       { name: 'Impostos', value: pPJ_Impostos },
       { name: 'INSS Pró-labore', value: pPJ_INSS },
       { name: 'Contabilidade', value: pPJ_Contabil },
@@ -246,17 +246,22 @@ function App() {
     ].filter((i) => i.value > 0);
 
     // --- 4. RESULTADO ---
-    const diferenca = recebimentoTotalPJ - recebimentoTotalCLT;
+    // Para fins de comparação (texto), consideramos que o PJ NÃO recebe os benefícios extras "por fora",
+    // ou seja, o valor bruto do PJ deve cobrir tudo.
+    // Mas no gráfico (recebimentoTotalPJ), mantemos os benefícios somados se o usuário os preencheu,
+    // assumindo que ele configurou o cenário assim.
+    // Porém, a queixa "não calcula a diferença com benefícios" sugere comparar:
+    // CLT (com benefícios) vs PJ (apenas líquido do faturamento).
+    const recebimentoPJParaComparacao = vBruto - totalDescontosPJ;
+    const diferenca = recebimentoPJParaComparacao - recebimentoTotalCLT;
     const diferencaValor = Math.abs(diferenca).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     
     // Função para calcular o salário bruto PJ equivalente para igualar o CLT
     const calcularSalarioBrutoPJEquivalente = (targetLiquido, regime) => {
-      // Target = vBrutoPJ - totalDescontosPJ + totalBeneficios
-      // totalDescontosPJ = impostosPJ + contabilidade + custosAdicionais + inssProLabore
-      // Assumindo contabilidade = 0 e custosAdicionais = 0 conforme código atual
-      // Target - totalBeneficios = vBrutoPJ - impostosPJ - inssProLabore
+      // Target = vBrutoPJ - totalDescontosPJ
+      // (Assumindo que o PJ tem que cobrir o targetLiquido APENAS com o faturamento, sem benefícios extras)
       
-      const targetSemBeneficios = targetLiquido - totalBeneficios;
+      const targetSemBeneficios = targetLiquido; // O PJ precisa cobrir TUDO
       const proLabore = regime === 'mei' ? 0 : 1518.0;
       const inssProLabore = regime === 'mei' ? 0 : proLabore * 0.11;
       
@@ -283,11 +288,20 @@ function App() {
 
     let fraseResultado = "";
     if (diferenca > 0) {
-      fraseResultado = `Como PJ, você receberia ${diferencaValor} a mais por mês em comparação com CLT.`;
+      fraseResultado = (
+        <>
+          Como PJ, você receberia <span className="highlight-value">{diferencaValor}</span> a mais por mês em comparação com CLT.
+        </>
+      );
     } else if (diferenca < 0) {
       const pjEquivalente = calcularSalarioBrutoPJEquivalente(recebimentoTotalCLT, regimeUsado);
       const pjEquivalenteFormatado = pjEquivalente.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-      fraseResultado = `Confira o salário bruto que você deve ganhar como PJ para receber a mesma remuneração líquida como CLT: ${pjEquivalenteFormatado}`;
+      fraseResultado = (
+        <>
+          Confira o faturamento que você deve ter como PJ <br/>
+          para receber o mesmo que o CLT: <span className="highlight-value">{pjEquivalenteFormatado}</span>
+        </>
+      );
     } else {
       fraseResultado = "Você receberia o mesmo valor em ambas as modalidades.";
     }
@@ -541,7 +555,7 @@ function App() {
                 </div>
               </div>
 
-              <p className="result-summary">
+              <p className="result-primary">
                 {resultData.mensagemDinamica}
               </p>
 
