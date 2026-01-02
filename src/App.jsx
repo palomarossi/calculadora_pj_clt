@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import './App.css';
 
 function App() {
-  const SALARIO_MINIMO_MENSAL = 1621;
+  const SALARIO_MINIMO_MENSAL = 1518;
   const SALARIO_MINIMO_MENSAL_LABEL = SALARIO_MINIMO_MENSAL.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
   // --- useStates (Dados do Formulário) ---
