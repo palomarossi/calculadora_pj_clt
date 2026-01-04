@@ -1,5 +1,5 @@
 
-# 🧮 Calculadora CLT x PJ 
+# 🧮 Comparador CLT x PJ 
 
 Uma ferramenta desenvolvida para comparar financeiramente os regimes de contratação **CLT** e **PJ**. 
 
