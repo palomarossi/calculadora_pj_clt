@@ -4,7 +4,7 @@
 Uma ferramenta desenvolvida para comparar financeiramente os regimes de contratação **CLT** e **PJ**. 
 
 
-🔗 **Demo Online:** [https://calculadora-pj-clt.vercel.app](https://calculadora-pj-clt.vercel.app)
+🔗 **Demo Online:** [https://comparador-pj-clt.vercel.app](https://comparador-pj-clt.vercel.app)
 
 ---
 
