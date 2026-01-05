@@ -290,7 +290,7 @@ function App() {
     if (diferenca > 0) {
       fraseResultado = (
         <>
-          Como PJ, você receberia <span className="highlight-value">{diferencaValor}</span> a mais por mês em comparação com CLT.
+          Como PJ, você receberia <span className="pj-clt-highlight-value">{diferencaValor}</span> a mais por mês em comparação com CLT.
         </>
       );
     } else if (diferenca < 0) {
@@ -299,7 +299,7 @@ function App() {
       fraseResultado = (
         <>
           Confira o faturamento que você deve ter como PJ <br/>
-          para receber o mesmo que o CLT: <span className="highlight-value">{pjEquivalenteFormatado}</span>
+          para receber o mesmo que o CLT: <span className="pj-clt-highlight-value">{pjEquivalenteFormatado}</span>
         </>
       );
     } else {
@@ -376,7 +376,7 @@ function App() {
     const textAnchor = x > cx ? 'start' : 'end';
 
     return (
-      <text x={x} y={y} fill="#111" textAnchor={textAnchor} dominantBaseline="central" style={{ fontSize: '12px', fontWeight: '800', fontFamily: 'Segoe UI, sans-serif' }}>
+      <text x={x} y={y} fill="#111" textAnchor={textAnchor} dominantBaseline="central" style={{ fontSize: '12px', fontWeight: '800', fontFamily: 'Inter, sans-serif' }}>
         <tspan x={x} dy="0.3em" textAnchor={textAnchor}>{`${value}%`}</tspan>
       </text>
     );
@@ -385,12 +385,12 @@ function App() {
   const renderChartLegend = (items, colors) => {
     if (!items || items.length === 0) return null;
     return (
-      <div className="chart-legend">
+      <div className="pj-clt-chart-legend">
         {items.map((item, index) => (
-          <div key={`${item.name}-${index}`} className="legend-item">
-            <span className="legend-swatch" style={{ backgroundColor: colors[index % colors.length] }} />
-            <span className="legend-text">{item.name}</span>
-            <span className="legend-value">{`${item.value}%`}</span>
+          <div key={`${item.name}-${index}`} className="pj-clt-legend-item">
+            <span className="pj-clt-legend-swatch" style={{ backgroundColor: colors[index % colors.length] }} />
+            <span className="pj-clt-legend-text">{item.name}</span>
+            <span className="pj-clt-legend-value">{`${item.value}%`}</span>
           </div>
         ))}
       </div>
@@ -398,11 +398,11 @@ function App() {
   };
 
   return (
-    <div className="page-background">
-      <div className={`main-card ${showResult ? 'expanded' : 'compact'}`}>
+    <div className="pj-clt-page-background">
+      <div className={`pj-clt-main-card ${showResult ? 'pj-clt-expanded' : 'pj-clt-compact'}`}>
         
         {/* Lado Esquerdo */}
-        <div className="left-panel">
+        <div className="pj-clt-left-panel">
           <h1>COMPARADOR<br />CLT x PJ</h1>
           <p>
             Tomar a decisão certa na hora de contratar
@@ -413,14 +413,14 @@ function App() {
         </div>
 
         {/* Lado Direito */}
-        <div className="right-panel">
+        <div className="pj-clt-right-panel">
           
           {!showResult ? (
             // --- TELA 1: FORMULÁRIO ---
             <>
               {errorMessage && (
-                <div key={errorKey} className="error-alert fade-in-down">
-                  <button className="close-btn" onClick={() => {
+                <div key={errorKey} className="pj-clt-error-alert pj-clt-fade-in-down">
+                  <button className="pj-clt-close-btn" onClick={() => {
                     setErrorMessage('');
                     setErrorFields({ valorBruto: false, beneficios: false, beneficiosValores: false });
                   }}>X</button>
@@ -429,19 +429,19 @@ function App() {
                 </div>
               )}
 
-              <div className="form-content fade-in">
+              <div className="pj-clt-form-content pj-clt-fade-in">
                 <h2>COMPARADOR CLT x PJ</h2>
                 
-                <div className="form-body-row">
-                  <div className="col-inputs">
+                <div className="pj-clt-form-body-row">
+                  <div className="pj-clt-col-inputs">
                     
                     {/* INPUT COM TOOLTIP RESTAURADO */}
-                    <div className="form-group">
+                    <div className="pj-clt-form-group">
                       <label htmlFor="valorBruto">
                         Valor Mensal Bruto 
-                        <span className="info-icon">
+                        <span className="pj-clt-info-icon">
                           ⓘ
-                          <span className="tooltip-box">
+                          <span className="pj-clt-tooltip-box">
                             Para CLT, será considerado
                             o salário mensal partindo do valor minimo R$1.621. Para PJ, será
                             considerado como “faturamento”.
@@ -460,71 +460,71 @@ function App() {
                             setValorBruto(SALARIO_MINIMO_MENSAL_LABEL);
                           }
                         }}
-                        className={`input-pill ${errorFields.valorBruto ? 'input-error' : ''}`}
+                        className={`pj-clt-input-pill ${errorFields.valorBruto ? 'pj-clt-input-error' : ''}`}
                         placeholder={SALARIO_MINIMO_MENSAL_LABEL}
                       />
                     </div>
 
                     {/* BENEFÍCIOS COM TOOLTIP RESTAURADO */}
-                    <div className="form-group">
+                    <div className="pj-clt-form-group">
                       <label>
                         Benefícios
-                        <span className="info-icon">
+                        <span className="pj-clt-info-icon">
                           ⓘ
-                          <span className="tooltip-box">
+                          <span className="pj-clt-tooltip-box">
                             Inclua todos os valores a mais que envolvem uma contratação, como: 
                             VR, VT, plano de saúde/odonto, auxílio-exercícios e afins.
                           </span>
                         </span>
                       </label>
-                      <div className={`checkbox-wrapper ${errorFields.beneficios ? 'benefits-error' : ''}`}>
-                        <label className={`checkbox-item ${temBeneficios === 'sim' ? 'active-check' : ''}`}>
+                      <div className={`pj-clt-checkbox-wrapper ${errorFields.beneficios ? 'pj-clt-benefits-error' : ''}`}>
+                        <label className={`pj-clt-checkbox-item ${temBeneficios === 'sim' ? 'pj-clt-active-check' : ''}`}>
                           <input type="checkbox" checked={temBeneficios === 'sim'} onChange={() => handleBeneficiosToggle('sim')} /> Sim
                         </label>
-                        <label className={`checkbox-item ${temBeneficios === 'nao' ? 'active-check' : ''}`}>
+                        <label className={`pj-clt-checkbox-item ${temBeneficios === 'nao' ? 'pj-clt-active-check' : ''}`}>
                           <input type="checkbox" checked={temBeneficios === 'nao'} onChange={() => handleBeneficiosToggle('nao')} /> Não
                         </label>
                       </div>
                     </div>
 
                     {temBeneficios === 'sim' && (
-                      <div className={`benefits-container fade-in ${errorFields.beneficiosValores ? 'benefits-values-error' : ''}`}>
-                        <div className="sub-input-group"><label>Vale-transporte:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={valeTransporte} onChange={handleBeneficioCurrencyInput(setValeTransporte)} className="input-sub"/></div>
-                        <div className="sub-input-group"><label>VR/VA:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={valeRefeicao} onChange={handleBeneficioCurrencyInput(setValeRefeicao)} className="input-sub"/></div>
-                        <div className="sub-input-group"><label>Plano de Saúde:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={planoSaude} onChange={handleBeneficioCurrencyInput(setPlanoSaude)} className="input-sub"/></div>
-                        <div className="sub-input-group"><label>Outros:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={outrosBeneficios} onChange={handleBeneficioCurrencyInput(setOutrosBeneficios)} className="input-sub"/></div>
+                      <div className={`pj-clt-benefits-container pj-clt-fade-in ${errorFields.beneficiosValores ? 'pj-clt-benefits-values-error' : ''}`}>
+                        <div className="pj-clt-sub-input-group"><label>Vale-transporte:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={valeTransporte} onChange={handleBeneficioCurrencyInput(setValeTransporte)} className="pj-clt-input-sub"/></div>
+                        <div className="pj-clt-sub-input-group"><label>VR/VA:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={valeRefeicao} onChange={handleBeneficioCurrencyInput(setValeRefeicao)} className="pj-clt-input-sub"/></div>
+                        <div className="pj-clt-sub-input-group"><label>Plano de Saúde:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={planoSaude} onChange={handleBeneficioCurrencyInput(setPlanoSaude)} className="pj-clt-input-sub"/></div>
+                        <div className="pj-clt-sub-input-group"><label>Outros:</label><input type="text" inputMode="numeric" pattern="[0-9]*" value={outrosBeneficios} onChange={handleBeneficioCurrencyInput(setOutrosBeneficios)} className="pj-clt-input-sub"/></div>
                       </div>
                     )}
 
-                    <div className="actions-row desktop-only">
-                      <button className="btn-action" onClick={handleComparar} disabled={compareLocked}>COMPARAR</button>
-                      <button type="button" className="btn-icon" onClick={handleReiniciar} aria-label="Reiniciar" title="Reiniciar">↻</button>
+                    <div className="pj-clt-actions-row pj-clt-desktop-only">
+                      <button className="pj-clt-btn-action" onClick={handleComparar} disabled={compareLocked}>COMPARAR</button>
+                      <button type="button" className="pj-clt-btn-icon" onClick={handleReiniciar} aria-label="Reiniciar" title="Reiniciar">↻</button>
                     </div>
                   </div>
 
-                  <div className="col-radios">
-                    <div className="form-group">
-                      <label className="label-destaque">Regime PJ:</label>
-                      <div className="radio-group">
-                        <label className={`radio-box ${regime === 'mei' ? 'selected' : ''}`}>
-                          <div className="radio-control"><input type="radio" name="regime" value="mei" checked={regime === 'mei'} onChange={(e) => setRegime(e.target.value)}/></div>
-                          <div className="radio-text"><strong>MEI (Microempreendedor Individual)</strong><span>— Taxa fixa mensal</span></div>
+                  <div className="pj-clt-col-radios">
+                    <div className="pj-clt-form-group">
+                      <label className="pj-clt-label-destaque">Regime PJ:</label>
+                      <div className="pj-clt-radio-group">
+                        <label className={`pj-clt-radio-box ${regime === 'mei' ? 'pj-clt-selected' : ''}`}>
+                          <div className="pj-clt-radio-control"><input type="radio" name="regime" value="mei" checked={regime === 'mei'} onChange={(e) => setRegime(e.target.value)}/></div>
+                          <div className="pj-clt-radio-text"><strong>MEI (Microempreendedor Individual)</strong><span>— Taxa fixa mensal</span></div>
                         </label>
 
-                        <label className={`radio-box ${regime === 'simples' ? 'selected' : ''}`}>
-                          <div className="radio-control"><input type="radio" name="regime" value="simples" checked={regime === 'simples'} onChange={(e) => setRegime(e.target.value)}/></div>
-                          <div className="radio-text"><strong>Simples Nacional</strong><span>— IRPJ/CSLL/PIS/COFINS: 6,00%</span></div>
+                        <label className={`pj-clt-radio-box ${regime === 'simples' ? 'pj-clt-selected' : ''}`}>
+                          <div className="pj-clt-radio-control"><input type="radio" name="regime" value="simples" checked={regime === 'simples'} onChange={(e) => setRegime(e.target.value)}/></div>
+                          <div className="pj-clt-radio-text"><strong>Simples Nacional</strong><span>— IRPJ/CSLL/PIS/COFINS: 6,00%</span></div>
                         </label>
 
-                        <label className={`radio-box ${regime === 'presumido' ? 'selected' : ''}`}>
-                          <div className="radio-control"><input type="radio" name="regime" value="presumido" checked={regime === 'presumido'} onChange={(e) => setRegime(e.target.value)}/></div>
-                          <div className="radio-text"><strong>Lucro Presumido</strong><span>— IRPJ/CSLL/PIS/COFINS: 11,33%</span><span>— Lucro Imobiliário</span></div>
+                        <label className={`pj-clt-radio-box ${regime === 'presumido' ? 'pj-clt-selected' : ''}`}>
+                          <div className="pj-clt-radio-control"><input type="radio" name="regime" value="presumido" checked={regime === 'presumido'} onChange={(e) => setRegime(e.target.value)}/></div>
+                          <div className="pj-clt-radio-text"><strong>Lucro Presumido</strong><span>— IRPJ/CSLL/PIS/COFINS: 11,33%</span><span>— Lucro Imobiliário</span></div>
                         </label>
                       </div>
 
-                      <div className="actions-row mobile-only">
-                        <button className="btn-action" onClick={handleComparar} disabled={compareLocked}>COMPARAR</button>
-                        <button type="button" className="btn-icon" onClick={handleReiniciar} aria-label="Reiniciar" title="Reiniciar">↻</button>
+                      <div className="pj-clt-actions-row pj-clt-mobile-only">
+                        <button className="pj-clt-btn-action" onClick={handleComparar} disabled={compareLocked}>COMPARAR</button>
+                        <button type="button" className="pj-clt-btn-icon" onClick={handleReiniciar} aria-label="Reiniciar" title="Reiniciar">↻</button>
                       </div>
                     </div>
                   </div>
@@ -533,38 +533,38 @@ function App() {
             </>
           ) : (
             // --- TELA 2: RESULTADOS ---
-            <div className="result-content fade-in">
-              <h2 className="result-title">VEJA A DIFERENÇA NA SUA<br/>CONTRATAÇÃO!</h2>
+            <div className="pj-clt-result-content pj-clt-fade-in">
+              <h2 className="pj-clt-result-title">VEJA A DIFERENÇA NA SUA<br/>CONTRATAÇÃO!</h2>
               
-              <div className="comparison-bars">
-                <div className="bar-row">
-                   <div className="bar-track">
-                     <div className="bar-pill pill-pj" style={{width: `${resultData.pj.percentBar}%`}}>
+              <div className="pj-clt-comparison-bars">
+                <div className="pj-clt-bar-row">
+                   <div className="pj-clt-bar-track">
+                     <div className="pj-clt-bar-pill pj-clt-pill-pj" style={{width: `${resultData.pj.percentBar}%`}}>
                         <span>{resultData.pj.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                      </div>
                    </div>
-                   <span className="bar-label-text">Pessoa Jurídica</span>
+                   <span className="pj-clt-bar-label-text">Pessoa Jurídica</span>
                 </div>
-                <div className="bar-row">
-                   <div className="bar-track">
-                     <div className="bar-pill pill-clt" style={{width: `${resultData.clt.percentBar}%`}}>
+                <div className="pj-clt-bar-row">
+                   <div className="pj-clt-bar-track">
+                     <div className="pj-clt-bar-pill pj-clt-pill-clt" style={{width: `${resultData.clt.percentBar}%`}}>
                         <span>{resultData.clt.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                      </div>
                    </div>
-                   <span className="bar-label-text">CLT</span>
+                   <span className="pj-clt-bar-label-text">CLT</span>
                 </div>
               </div>
 
-              <p className="result-primary">
+              <p className="pj-clt-result-primary">
                 {resultData.mensagemDinamica}
               </p>
 
-              <div className="charts-row">
+              <div className="pj-clt-charts-row">
                 {/* GRÁFICO CLT */}
-                <div className="chart-column">
-                  <h4 className="chart-header">VEJA OS GASTOS NA CONTRATAÇÃO VIA CLT:</h4>
-                  <div className="recharts-wrapper-custom">
-                    <ResponsiveContainer width="100%" height="100%">
+                <div className="pj-clt-chart-column">
+                  <h4 className="pj-clt-chart-header">VEJA OS GASTOS NA CONTRATAÇÃO VIA CLT:</h4>
+                  <div className="pj-clt-recharts-wrapper-custom">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                       <PieChart>
                         <Pie data={resultData.clt.chart} cx="50%" cy="50%" innerRadius={0} outerRadius={85} dataKey="value" label={renderCustomizedLabel} labelLine={false}>
                           {resultData.clt.chart.map((entry, index) => (
@@ -575,7 +575,7 @@ function App() {
                     </ResponsiveContainer>
                   </div>
                   {renderChartLegend(resultData.clt.chart, COLORS_CLT)}
-                  <p className="chart-footer-text">
+                  <p className="pj-clt-chart-footer-text">
                     <strong>(-) Descontos:</strong> {resultData.clt.descontos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} 
                     (INSS, IRRF, VT)<br/>
                     <strong>(+) Benefícios obrigatórios:</strong> {resultData.clt.beneficiosObrig.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} 
@@ -586,10 +586,10 @@ function App() {
                 </div>
 
                 {/* GRÁFICO PJ */}
-                <div className="chart-column">
-                  <h4 className="chart-header">VEJA OS GASTOS NA CONTRATAÇÃO VIA PJ:</h4>
-                  <div className="recharts-wrapper-custom">
-                    <ResponsiveContainer width="100%" height="100%">
+                <div className="pj-clt-chart-column">
+                  <h4 className="pj-clt-chart-header">VEJA OS GASTOS NA CONTRATAÇÃO VIA PJ:</h4>
+                  <div className="pj-clt-recharts-wrapper-custom">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                       <PieChart>
                         <Pie data={resultData.pj.chart} cx="50%" cy="50%" innerRadius={0} outerRadius={85} dataKey="value" label={renderCustomizedLabel} labelLine={false}>
                           {resultData.pj.chart.map((entry, index) => (
@@ -600,7 +600,7 @@ function App() {
                     </ResponsiveContainer>
                   </div>
                   {renderChartLegend(resultData.pj.chart, COLORS_PJ)}
-                  <p className="chart-footer-text">
+                  <p className="pj-clt-chart-footer-text">
                     <strong>(-) Descontos:</strong> {resultData.pj.descontos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} 
                     (Impostos + INSS + Contabilidade + Custos)<br/>
                     {resultData.pj.beneficiosExtras > 0 ? `(+) Outros benefícios: ${resultData.pj.beneficiosExtras.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : ''}
@@ -609,14 +609,14 @@ function App() {
                 </div>
               </div>
 
-              <button className="btn-back" onClick={handleRefazer}>Refazer Cálculo</button>
+              <button className="pj-clt-btn-back" onClick={handleRefazer}>Refazer Cálculo</button>
             </div>
           )}
         </div>
       </div>
 
-      <div className="footer-cta">
-        <div className="footer-content">
+      <div className="pj-clt-footer-cta">
+        <div className="pj-clt-footer-content">
         </div>
       </div>
     </div>

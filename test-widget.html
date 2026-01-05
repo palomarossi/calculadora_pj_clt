@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste do Widget PJ x CLT</title>
+    
+    <!-- Simulação de estilos do site hospedeiro para testar isolamento -->
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace; /* Fonte diferente para provar que o widget usa Inter */
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 40px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .container-site {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+
+    <!-- 1. Importar o CSS do Widget -->
+    <link rel="stylesheet" href="./dist/widget.css">
+</head>
+<body>
+
+    <div class="container-site">
+        <h1>Página de Teste (Host)</h1>
+        <p style="text-align: center; margin-bottom: 20px;">
+            Abaixo está o widget incorporado. Ele deve ter sua própria fonte (Inter) e estilo, 
+            sem ser afetado pelo estilo desta página (Courier New).
+        </p>
+
+        <!-- 2. Container onde o Widget será renderizado -->
+        <div data-pj-clt-widget></div>
+    </div>
+
+    <!-- 3. Importar o JS do Widget (UMD - funciona sem servidor) -->
+    <script src="./dist/widget.js"></script>
+
+</body>
+</html>
