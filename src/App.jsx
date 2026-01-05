@@ -566,7 +566,7 @@ function App() {
                   <div className="pj-clt-recharts-wrapper-custom">
                     <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                       <PieChart>
-                        <Pie data={resultData.clt.chart} cx="50%" cy="50%" innerRadius={0} outerRadius={85} dataKey="value" label={renderCustomizedLabel} labelLine={false}>
+                        <Pie data={resultData.clt.chart} cx="50%" cy="50%" innerRadius={0} outerRadius="45%" dataKey="value" label={renderCustomizedLabel} labelLine={false}>
                           {resultData.clt.chart.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS_CLT[index % COLORS_CLT.length]} stroke="none"/>
                           ))}
@@ -591,7 +591,7 @@ function App() {
                   <div className="pj-clt-recharts-wrapper-custom">
                     <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                       <PieChart>
-                        <Pie data={resultData.pj.chart} cx="50%" cy="50%" innerRadius={0} outerRadius={85} dataKey="value" label={renderCustomizedLabel} labelLine={false}>
+                        <Pie data={resultData.pj.chart} cx="50%" cy="50%" innerRadius={0} outerRadius="45%" dataKey="value" label={renderCustomizedLabel} labelLine={false}>
                           {resultData.pj.chart.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS_PJ[index % COLORS_PJ.length]} stroke="none"/>
                           ))}

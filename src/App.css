@@ -782,25 +782,43 @@
 
 /* --- MEDIA QUERIES (MOBILE ADAPTATION) --- */
 @media (max-width: 950px) {
+  /* Ajuste do container de fundo para mobile */
+  [data-pj-clt-widget] .pj-clt-page-background {
+    padding: 10px; /* Reduzido de 20px para aproveitar mais a tela */
+    align-items: flex-start; /* Evita cortar o topo em telas pequenas */
+  }
+
   /* Força o card principal a virar coluna */
   [data-pj-clt-widget] .pj-clt-main-card {
     flex-direction: column;
-    max-width: 600px;
-    gap: 2rem;
-    margin-bottom: 60px; /* Espaço para o footer fixo não cobrir */
+    max-width: 100%; 
+    width: 100%;
+    padding: 0 5px; /* Remove padding do card para o painel branco crescer */
+    gap: 1.5rem;
+    margin-bottom: 60px;
   }
   
   [data-pj-clt-widget] .pj-clt-left-panel {
     text-align: center;
-    padding: 1rem;
+    padding: 0.5rem 0;
     align-items: center;
+    justify-content: center;
+    width: 100%;
   }
-  [data-pj-clt-widget] .pj-clt-left-panel h1 { font-size: 2.5rem; }
+  [data-pj-clt-widget] .pj-clt-left-panel h1 { 
+    font-size: 1.6rem; 
+    text-align: center;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
 
   [data-pj-clt-widget] .pj-clt-right-panel {
-    padding: 2rem 1.5rem; /* Menos padding lateral */
+    padding: 1.5rem 1rem; /* Padding interno equilibrado */
     width: 100%; 
+    margin: 0; /* Garante que não haja margem deslocando o painel */
+    margin-right: -17px; /* Encosta mais no lado direito no mobile */
     border-radius: 15px;
+    box-sizing: border-box; 
   }
   
   /* Ajustes do Formulário no Mobile */
@@ -813,28 +831,34 @@
   /* Ajustes dos Resultados no Mobile */
   [data-pj-clt-widget] .pj-clt-charts-row {
     flex-direction: column;
-    gap: 50px;
+    gap: 40px;
     align-items: center;
+    width: 100%;
   }
   
   [data-pj-clt-widget] .pj-clt-recharts-wrapper-custom {
-    /* No mobile, garante que o gráfico não estoure a tela */
     max-width: 100%; 
-    height: 350px; /* Um pouco menor no mobile para caber melhor */
+    height: 280px;
   }
 
   [data-pj-clt-widget] .pj-clt-bar-row {
     flex-direction: column;
-    align-items: center; /* Centraliza as barras e textos */
+    align-items: center;
+    width: 100%;
   }
   
   [data-pj-clt-widget] .pj-clt-bar-track {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    background-color: #f3f4f6;
+    border-radius: 8px;
   }
 
-  [data-pj-clt-widget] .pj-clt-bar-pill { width: 100% !important; max-width: 300px; }
+  [data-pj-clt-widget] .pj-clt-bar-pill { 
+    max-width: 100%; 
+  }
+  
   [data-pj-clt-widget] .pj-clt-bar-label-text {
     margin-left: 0; 
     margin-top: 5px;
@@ -842,12 +866,38 @@
     text-align: center;
     color: #1e3a8a;
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     white-space: nowrap;
   }
   
-  [data-pj-clt-widget] .pj-clt-result-title { font-size: 1.5rem; }
-  [data-pj-clt-widget] .pj-clt-result-summary br { display: none; } /* Remove quebra de linha no mobile */
+  [data-pj-clt-widget] .pj-clt-result-title { 
+    font-size: clamp(1.05rem, 5.5vw, 1.35rem);
+    text-align: center;
+    width: 100%;
+    line-height: 1.25;
+    padding: 0 8px;
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+  
+  [data-pj-clt-widget] .pj-clt-chart-header {
+    font-size: 0.85rem;
+    padding: 0 5px;
+    word-wrap: break-word;
+  }
+
+  [data-pj-clt-widget] .pj-clt-chart-footer-text {
+    font-size: 0.85rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 5px;
+  }
+
+  [data-pj-clt-widget] .pj-clt-result-summary br { display: none; }
 
   /* Ajuste do Footer no Mobile */
   [data-pj-clt-widget] .pj-clt-footer-cta {
